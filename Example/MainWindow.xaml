@@ -1,0 +1,19 @@
+﻿<Window x:Class="Example.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:bc="clr-namespace:BreadcrumbControl;assembly=BreadcrumbControl"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System"
+        xmlns:example="clr-namespace:Example"
+        Title="MainWindow"
+        Width="525"
+        Height="350"
+        mc:Ignorable="d">
+    <StackPanel>
+        <bc:BreadcrumbItem x:Name="BreadcrumbItem" Header="Parent">
+            <bc:BreadcrumbItem Header="Child1"/>
+            <bc:BreadcrumbItem Header="Child2"/>
+        </bc:BreadcrumbItem>
+    </StackPanel>
+</Window>
