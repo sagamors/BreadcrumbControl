@@ -51,11 +51,6 @@ namespace BreadcrumbControl
 
         public override void OnApplyTemplate()
         {
-            _contextMenu = GetTemplateChild(_partContextMenu) as ContextMenu;
-            if (_contextMenu != null)
-            {
-                _contextMenu.Opened += ContextMenu_Opened;
-            }
             base.OnApplyTemplate();
         }
 

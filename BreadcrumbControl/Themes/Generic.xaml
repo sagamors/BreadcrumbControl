@@ -9,12 +9,12 @@
 
     <converters:AndMultiBoolConverter x:Key="AndMultiBoolConverter" />
     <converters:OrMultiBoolConverter x:Key="OrMultiBoolConverter" />
-
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter"></converters:InverseBoolToVisibilityConverter>
+    
     <Geometry x:Shared="True" x:Key="RightArrowGeometry">M0,0 L5,3.5 0,7 z</Geometry>
     <Geometry x:Key="DownArrowGeometry">M0,3 L7,3 3.5,7 z</Geometry>
     <Geometry x:Key="OverflowArrowGeometry">F1 M7,0 L4,3 7,6 M3,0 L0,3 3,6</Geometry>
-
-
 
     <Path x:Key="DownArrow"
           HorizontalAlignment="Center"
@@ -46,17 +46,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!--    <Style x:Key="BreadcrumbButtonDropDown" TargetType="local:BreadcrumbButton">
-        <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="ContextMenu.PlacementTarget" Value="{Binding RelativeSource={RelativeSource Self}}"/>
-                <Setter Property="ContextMenu.Placement" Value="Bottom"/>
-                <Setter Property="ContextMenu.IsOpen" Value="True"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>-->
-
+    
     <LinearGradientBrush x:Key="ButtonNormalBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#F3F3F3" />
         <GradientStop Offset="0.5" Color="#EBEBEB" />
@@ -65,48 +55,7 @@
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="ButtonNormalBorder" Color="#FF707070" />
-
-    <Style x:Key="AeroButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="1" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <themes:ButtonChrome x:Name="Chrome"
-                                         Background="{TemplateBinding Background}"
-                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                         RenderDefaulted="{TemplateBinding IsDefaulted}"
-                                         RenderMouseOver="{TemplateBinding IsMouseOver}"
-                                         RenderPressed="{TemplateBinding IsPressed}"
-                                         SnapsToDevicePixels="true">
-                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </themes:ButtonChrome>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter TargetName="Chrome" Property="RenderDefaulted" Value="true" />
-                        </Trigger>
-                        <Trigger Property="ToggleButton.IsChecked" Value="true">
-                            <Setter TargetName="Chrome" Property="RenderPressed" Value="true" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="#ADADAD" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
+    
     <Style x:Key="ButtonFocusVisual2">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -118,6 +67,168 @@
                                    StrokeDashArray="1 2"
                                    StrokeThickness="1" />
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:BreadcrumbItem}">
+        <Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <ContentPresenter Content="{Binding}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:BreadcrumbItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <local:BreadcrumbButton x:Name="PART_HeaderButton"
+                                                    Grid.Column="0"
+                                                    IsChecked="{Binding ElementName=PART_Button,
+                                                                        Path=IsChecked,
+                                                                        Mode=OneWay}">
+                                <ContentPresenter x:Name="PART_Header"
+                                                  VerticalAlignment="Center"
+                                                  Content="{TemplateBinding Header}"
+                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                            </local:BreadcrumbButton>
+                            <local:DropDownButton
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding Items, RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor}, Mode=OneWay }"
+                                    SelectedValue="{Binding SelectedValue, Mode=TwoWay,RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor} }"
+                                    Visibility="{Binding HasItems, RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor}, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    />
+
+                            <ContentPresenter x:Name="PART_Content"
+                                              Grid.Column="2"
+                                              Content="{TemplateBinding SelectedValue}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="{x:Type local:DropDownButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate DataType="ToggleButton">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentPresenter Margin="3" Content="{Binding Header, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"/>
+                        <ContentControl >
+                            <Grid>
+                                <Path x:Name="DownArrow"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="{StaticResource DownArrowGeometry}"
+                                      Fill="Black"
+                                      Focusable="False"
+                                      SnapsToDevicePixels="True"
+                                      Visibility="{Binding IsChecked,  RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}, Converter={StaticResource BoolToVisibilityConverter}}"
+                                      />
+                                <Path x:Name="LeftArrow"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="{StaticResource RightArrowGeometry}"
+                                      Fill="Black"
+                                      Focusable="False"
+                                      SnapsToDevicePixels="True" 
+                                      Visibility="{Binding IsChecked,  RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}, Converter={StaticResource  InverseBoolToVisibilityConverter}}"
+                                      />
+                            </Grid>
+                        </ContentControl>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ContextMenu" >
+            <Setter.Value>
+                <ContextMenu  IsOpen="{Binding Path=DataContext.IsChecked, RelativeSource={RelativeSource Self}}"
+                             IsTextSearchEnabled="True" 
+                             ItemsSource="{Binding Path=DataContext.ItemsSource, RelativeSource={RelativeSource Self}}"
+                             Placement="Bottom"
+                            
+                             >                    
+                    <ContextMenu.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Header}"/>
+                            <Setter Property="Icon" Value="{Binding Icon}"/>
+                        </Style>
+                    </ContextMenu.ItemContainerStyle>
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <Style TargetType="{x:Type local:BreadcrumbButton}">
+        <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
+        <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Padding" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <themes:ButtonChrome x:Name="Chrome"
+                                         Background="{TemplateBinding Background}"
+                                         BorderBrush="{TemplateBinding BorderBrush}"
+                                         RenderDefaulted="{TemplateBinding Button.IsDefaulted}"
+                                         RenderPressed="{TemplateBinding IsPressed}"
+                                         RoundCorners="False"
+                                         SnapsToDevicePixels="true">
+                        <themes:ButtonChrome.RenderMouseOver>
+                            <MultiBinding Converter="{StaticResource OrMultiBoolConverter}">
+                                <Binding Path="IsMouseOver" RelativeSource="{RelativeSource AncestorType=local:BreadcrumbButton, Mode=FindAncestor}" />
+                                <Binding Path="IsMouseOverRender" RelativeSource="{RelativeSource AncestorType=local:BreadcrumbButton, Mode=FindAncestor}" />
+                            </MultiBinding>
+                        </themes:ButtonChrome.RenderMouseOver>
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </themes:ButtonChrome>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter TargetName="Chrome" Property="RenderDefaulted" Value="true" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="Chrome" Property="RenderPressed" Value="true" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="#ADADAD" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -169,109 +280,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BreadcrumbButton" TargetType="Button">
-        <Setter Property="Width" Value="30" />
-    </Style>
-
-    <Style TargetType="{x:Type local:Breadcrumb}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:Breadcrumb}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}" />
-
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="DropDownBreadcrumbButtonStyle" TargetType="local:BreadcrumbButton">
-        <Setter Property="Content">
-            <Setter.Value>
-                <Path HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"
-                                          Data="{StaticResource RightArrowGeometry}"
-                                          Fill="Black"
-                                          Focusable="False"
-                                          SnapsToDevicePixels="True" />
-            </Setter.Value>
-
-
-        </Setter>
-<Setter Property="ContextMenu">
-            <Setter.Value>
-                <ContextMenu HorizontalOffset="-14"
-                                                 x:Name="PART_ContextMenu"
-                                                 IsOpen="{Binding Path=DataContext.IsChecked, RelativeSource={RelativeSource Self}}"
-                                                 IsTextSearchEnabled="True" 
-                                                 ItemsSource="{Binding Path=DataContext.Items, RelativeSource={RelativeSource Self}}"
-                                                 Placement="Bottom"
-                                                 >
-                    <ContextMenu.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Header" Value="{Binding Header}"/>
-                            <Setter Property="Icon" Value="{Binding Icon}"/>
-                        </Style>
-                    </ContextMenu.ItemContainerStyle>
-                </ContextMenu>
-            </Setter.Value>
-</Setter>
-
-    </Style>
-
-    <Style TargetType="{x:Type local:BreadcrumbItem}">
-        <Setter Property="HeaderTemplate">
-            <Setter.Value>
-                <ControlTemplate>
-                    <ContentPresenter Content="{Binding}" />
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:BreadcrumbItem}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="15" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <local:BreadcrumbButton x:Name="PART_HeaderButton"
-                                                    Grid.Column="0"
-                                                    IsChecked="{Binding ElementName=PART_Button,
-                                                                        Path=IsChecked,
-                                                                        Mode=OneWay}">
-                                <ContentPresenter x:Name="PART_Header"
-                                                  VerticalAlignment="Center"
-                                                  Content="{TemplateBinding Header}"
-                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
-                            </local:BreadcrumbButton>
-
-                            <local:BreadcrumbButton x:Name="PART_Button"
-                                                    Grid.Column="1"
-                                                    IsMouseOverRender="{Binding ElementName=PART_HeaderButton, Path=IsMouseOver}"
-                                                    Style="{StaticResource DropDownBreadcrumbButtonStyle}"
-                                                    />
-                         
-                            <ContentPresenter x:Name="PART_Content"
-                                              Grid.Column="2"
-                                              Content="{TemplateBinding SelectedValue}" />
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-    
-
-
-    <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+    <Style x:Key="AeroButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
         <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
         <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
@@ -282,11 +291,11 @@
         <Setter Property="Padding" Value="1" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <themes:ButtonChrome x:Name="Chrome"
                                          Background="{TemplateBinding Background}"
                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                         RenderDefaulted="{TemplateBinding Button.IsDefaulted}"
+                                         RenderDefaulted="{TemplateBinding IsDefaulted}"
                                          RenderMouseOver="{TemplateBinding IsMouseOver}"
                                          RenderPressed="{TemplateBinding IsPressed}"
                                          SnapsToDevicePixels="true">
@@ -300,7 +309,7 @@
                         <Trigger Property="IsKeyboardFocused" Value="true">
                             <Setter TargetName="Chrome" Property="RenderDefaulted" Value="true" />
                         </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
+                        <Trigger Property="ToggleButton.IsChecked" Value="true">
                             <Setter TargetName="Chrome" Property="RenderPressed" Value="true" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
@@ -311,52 +320,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style TargetType="{x:Type local:BreadcrumbButton}">
-        <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
-        <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ButtonNormalBorder}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="1" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <themes:ButtonChrome x:Name="Chrome"
-                                         Background="{TemplateBinding Background}"
-                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                         RenderDefaulted="{TemplateBinding Button.IsDefaulted}"
-                                         RenderPressed="{TemplateBinding IsPressed}"
-                                         RoundCorners="False"
-                                         SnapsToDevicePixels="true">
-                        <themes:ButtonChrome.RenderMouseOver>
-                            <MultiBinding Converter="{StaticResource OrMultiBoolConverter}">
-                                <Binding Path="IsMouseOver" RelativeSource="{RelativeSource AncestorType=local:BreadcrumbButton, Mode=FindAncestor}" />
-                                <Binding Path="IsMouseOverRender" RelativeSource="{RelativeSource AncestorType=local:BreadcrumbButton, Mode=FindAncestor}" />
-                            </MultiBinding>
-                        </themes:ButtonChrome.RenderMouseOver>
-                        <ContentPresenter Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          RecognizesAccessKey="True"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                    </themes:ButtonChrome>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter TargetName="Chrome" Property="RenderDefaulted" Value="true" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="Chrome" Property="RenderPressed" Value="true" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="#ADADAD" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

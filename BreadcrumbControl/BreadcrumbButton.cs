@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -38,18 +39,34 @@ namespace BreadcrumbControl
     ///     <MyNamespace:BreadcrumbButton/>
     ///
     /// </summary>
-    [TemplatePart(Name = partContextMenu)]
     public class BreadcrumbButton : ToggleButton
     {
         private const string partContextMenu = "PART_ContextMenu";
         private ContextMenu _contextMenu;
-        public static readonly DependencyProperty IsMouseOverRenderProperty = DependencyProperty.Register(
-            "IsMouseOverRender", typeof (bool), typeof (BreadcrumbButton), new PropertyMetadata(default(bool)));
 
+        public static readonly DependencyProperty IsMouseOverRenderProperty = DependencyProperty.Register("IsMouseOverRender", typeof (bool), typeof (BreadcrumbButton), new PropertyMetadata(default(bool)));
         public bool IsMouseOverRender
         {
             get { return (bool) GetValue(IsMouseOverRenderProperty); }
             set { SetValue(IsMouseOverRenderProperty, value); }
+        }
+
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
+            "ItemsSource", typeof (IEnumerable), typeof (BreadcrumbButton), new PropertyMetadata(default(IEnumerable)));
+
+        public IEnumerable ItemsSource
+        {
+            get { return (IEnumerable) GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(
+            "SelectedValue", typeof (object), typeof (BreadcrumbButton), new PropertyMetadata(default(object)));
+
+        public object SelectedValue
+        {
+            get { return (object) GetValue(SelectedValueProperty); }
+            set { SetValue(SelectedValueProperty, value); }
         }
 
         static BreadcrumbButton()
@@ -57,18 +74,6 @@ namespace BreadcrumbControl
             DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadcrumbButton), new FrameworkPropertyMetadata(typeof(BreadcrumbButton)));
         }
 
-        public BreadcrumbButton()
-        {
-            Initialized += BreadcrumbButton_Initialized;
-        }
 
-        private void BreadcrumbButton_Initialized(object sender, EventArgs e)
-        {
-            if (ContextMenu != null)
-            {
-                ContextMenu.DataContext = this;
-                ContextMenu.PlacementTarget = this;
-            }
-        }
     }
 }

@@ -63,7 +63,9 @@
     <Compile Include="BreadcrumbButton.cs" />
     <Compile Include="BreadcrumbItem.cs" />
     <Compile Include="Converters\AndMultiBoolConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OrMultiBoolConverter.cs" />
+    <Compile Include="DropDownButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
