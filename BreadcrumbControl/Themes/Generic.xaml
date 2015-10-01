@@ -148,47 +148,26 @@
                                       />
                             </Grid>
                         </ContentControl>
+                        <StackPanel.ContextMenu>
+                            <ContextMenu x:Name="PART_ContextMenu"
+                                Placement="MousePoint" 
+                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"
+                                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"
+                                >
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Header" Value="{Binding Header}"/>
+                                        <Setter Property="Icon" Value="{Binding Icon}"/>
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                     </StackPanel>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="ContextMenu" >
-            <Setter.Value>
-                <ContextMenu  IsOpen="{Binding Path=DataContext.IsChecked, RelativeSource={RelativeSource Self}}"
-                             IsTextSearchEnabled="True" 
-                             ItemsSource="{Binding Path=DataContext.ItemsSource, RelativeSource={RelativeSource Self}}"
-                             Placement="Bottom"
-                            
-                             >                    
-                    <ContextMenu.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
-                            <Setter Property="Header" Value="{Binding Header}"/>
-                            <Setter Property="Icon" Value="{Binding Icon}"/>
-                        </Style>
-                    </ContextMenu.ItemContainerStyle>
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
     </Style>
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <Style TargetType="{x:Type local:BreadcrumbButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}" />
         <Setter Property="Background" Value="{StaticResource ButtonNormalBackground}" />

@@ -13,10 +13,15 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         >
     <StackPanel>
-<!--        <bc:BreadcrumbItem x:Name="BreadcrumbItem" Header="Parent">
-            <bc:BreadcrumbItem Header="Child1"/>
+        <bc:BreadcrumbItem x:Name="BreadcrumbItem" Header="Parent">
+            <bc:BreadcrumbItem Header="Child1">
+                <bc:BreadcrumbItem Header="Child11"/>
+                <bc:BreadcrumbItem Header="Child11"/>
+
+            </bc:BreadcrumbItem>
+            
             <bc:BreadcrumbItem Header="Child2"/>
-        </bc:BreadcrumbItem>-->
+        </bc:BreadcrumbItem>
         <bc:DropDownButton Header="Header"  
                            ItemsSource="{Binding Items}">
         </bc:DropDownButton>

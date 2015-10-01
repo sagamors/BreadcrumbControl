@@ -48,31 +48,5 @@ namespace BreadcrumbControl
             DefaultStyleKeyProperty.OverrideMetadata(typeof (BreadcrumbItem),
                 new FrameworkPropertyMetadata(typeof (BreadcrumbItem)));
         }
-
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-        }
-
-        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
-        {
-            var contextMenu = ((ContextMenu) sender);
-            foreach (var menu in contextMenu.Items)
-            {
-                var itemMenu = contextMenu.ItemContainerGenerator.ContainerFromItem(menu) as MenuItem;
-                if (itemMenu == null) continue;
-                itemMenu.Click -= Menu_Click;
-                itemMenu.Click += Menu_Click;
-            }
-        }
-
-        private void Menu_Click(object sender, RoutedEventArgs e)
-        {
-            MenuItem menuItem = sender as MenuItem;
-            if (menuItem != null)
-            {
-                SelectedValue = menuItem.DataContext;
-            }
-        }
     }
 }
