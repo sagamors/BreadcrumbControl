@@ -25,10 +25,5 @@
         <bc:DropDownButton Header="Header"  
                            ItemsSource="{Binding Items}">
         </bc:DropDownButton>
-        <bc:DropDownButton Header="Heade2r"  
-                           ItemsSource="{Binding Items}">
-        </bc:DropDownButton>
-        <example:CustomControl1 Width="50" Height="50" Background="Red"></example:CustomControl1>
-        <example:CustomControl1 Width="50" Height="50" Background="Beige"></example:CustomControl1>
     </StackPanel>
 </Window>

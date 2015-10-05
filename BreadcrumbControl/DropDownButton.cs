@@ -2,11 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace BreadcrumbControl
 {
     public class DropDownButton : ToggleButton
     {
+        private const string _partContent = "PART_Content";
         private ContextMenu _contextMenu;
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
@@ -52,7 +54,13 @@ namespace BreadcrumbControl
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            _contextMenu = GetTemplateChild("PART_ContextMenu") as ContextMenu;
+            var contentPresenter = GetTemplateChild(_partContent) as ContentPresenter;
+            contentPresenter.ApplyTemplate();
+            var stackPanel =  contentPresenter.ContentTemplate.FindName("StackPanel", contentPresenter) as FrameworkElement;
+            if (stackPanel != null)
+            {
+                _contextMenu = stackPanel.ContextMenu;
+            }
             if (_contextMenu != null)
             {
                 _contextMenu.DataContext = this;
@@ -63,6 +71,13 @@ namespace BreadcrumbControl
 
             Checked += DropDownButton_Checked;
             Unchecked += DropDownButton_Unchecked;
+         
+        }
+
+        private void DropDownButton_Loaded(object sender, RoutedEventArgs e)
+        {
+           var fgghhh =  GetTemplateChild("PART_Content") as ContentPresenter;
+
         }
 
         private void ContextMenu_Closed(object sender, RoutedEventArgs e)
@@ -73,20 +88,20 @@ namespace BreadcrumbControl
 
         private void DropDownButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (ContextMenu == null) return;
-            ContextMenu.IsOpen = false;
+            if (_contextMenu == null) return;
+            _contextMenu.IsOpen = false;
             IsChecked = false;
         }
 
         private void DropDownButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (ContextMenu == null) return;
-            ((DropDownButton)ContextMenu.PlacementTarget).IsChecked = false;
+            if (_contextMenu == null) return;
+            ((DropDownButton)_contextMenu.PlacementTarget).IsChecked = false;
 
-            ContextMenu.PlacementTarget = this;
-            ContextMenu.Placement = PlacementMode.Bottom;
-            ContextMenu.ItemsSource = ItemsSource;
-            ContextMenu.IsOpen = true;
+            _contextMenu.PlacementTarget = this;
+            _contextMenu.Placement = PlacementMode.Bottom;
+            _contextMenu.ItemsSource = ItemsSource;
+            _contextMenu.IsOpen = true;
         }
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
@@ -106,15 +121,6 @@ namespace BreadcrumbControl
             MenuItem menuItem = sender as MenuItem;
             if (menuItem != null)
             {
-                ContextMenu mainMenu;
-/*                while (menuItem)
-                {
-                    
-                }
-                foreach (var VARIABLE in menuItem)
-                {
-                    
-                }*/
                 SelectedValue = menuItem.DataContext;
             }
         }

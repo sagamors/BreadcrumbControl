@@ -89,7 +89,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="22" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
@@ -121,13 +121,29 @@
     </Style>
     
     <Style TargetType="{x:Type local:DropDownButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:DropDownButton}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="PART_Content"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="ContentTemplate">
             <Setter.Value>
-                <DataTemplate DataType="ToggleButton">
-                    <StackPanel Orientation="Horizontal">
-                        <ContentPresenter Margin="3" Content="{Binding Header, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"/>
-                        <ContentControl >
-                            <Grid>
+                <DataTemplate DataType="local:DropDownButton">
+                    <Grid  x:Name="StackPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition  Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Grid.Column="0" Content="{Binding Header, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"/>
+                        <ContentControl Margin="2" Grid.Column="1" HorizontalContentAlignment="Center" >
+                            <Grid >
                                 <Path x:Name="DownArrow"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
@@ -148,12 +164,8 @@
                                       />
                             </Grid>
                         </ContentControl>
-                        <StackPanel.ContextMenu>
-                            <ContextMenu x:Name="PART_ContextMenu"
-                                Placement="MousePoint" 
-                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"
-                                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=local:DropDownButton, Mode=FindAncestor}}"
-                                >
+                        <Grid.ContextMenu>
+                            <ContextMenu x:Name="PART_ContextMenu">
                                 <ContextMenu.ItemContainerStyle>
                                     <Style TargetType="MenuItem">
                                         <Setter Property="Header" Value="{Binding Header}"/>
@@ -161,8 +173,8 @@
                                     </Style>
                                 </ContextMenu.ItemContainerStyle>
                             </ContextMenu>
-                        </StackPanel.ContextMenu>
-                    </StackPanel>
+                        </Grid.ContextMenu>
+                    </Grid>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
