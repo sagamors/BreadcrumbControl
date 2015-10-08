@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace BreadcrumbControl
 {
@@ -32,7 +33,7 @@ namespace BreadcrumbControl
     ///     <MyNamespace:Breadcrumb/>
     ///
     /// </summary>
-    public class Breadcrumb : Control
+    public class Breadcrumb : Selector
     {
         static Breadcrumb()
         {

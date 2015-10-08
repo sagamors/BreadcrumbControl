@@ -72,6 +72,29 @@
         </Setter>
     </Style>
 
+    <Style TargetType="{x:Type local:Breadcrumb}">
+        <Style.Resources>
+            <Style TargetType="local:BreadcrumbItem">
+                <Setter Property="SelectedValue" Value="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb, Mode=FindAncestor}, Path=SelectedValue, Mode=OneWayToSource}"></Setter>
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Breadcrumb}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <ProgressBar Minimum="0" Value="50" Maximum="100"/>
+                            <local:BreadcrumbItem Header="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedValue}" ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Items}" 
+                                                  >
+                            </local:BreadcrumbItem>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type local:BreadcrumbItem}">
         <Setter Property="HeaderTemplate">
             <Setter.Value>
@@ -97,7 +120,9 @@
                                                     Grid.Column="0"
                                                     IsChecked="{Binding ElementName=PART_Button,
                                                                         Path=IsChecked,
-                                                                        Mode=OneWay}">
+                                                                        Mode=OneWay}"
+                                                     Background="Transparent"
+                                                    >
                                 <ContentPresenter x:Name="PART_Header"
                                                   VerticalAlignment="Center"
                                                   Content="{TemplateBinding Header}"
@@ -108,7 +133,8 @@
                                     ItemsSource="{Binding Items, RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor}, Mode=OneWay }"
                                     SelectedValue="{Binding SelectedValue, Mode=TwoWay,RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor} }"
                                     Visibility="{Binding HasItems, RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor}, Converter={StaticResource BoolToVisibilityConverter}}"
-                                    />
+                                    Background="Transparent"
+                                />
 
                             <ContentPresenter x:Name="PART_Content"
                                               Grid.Column="2"

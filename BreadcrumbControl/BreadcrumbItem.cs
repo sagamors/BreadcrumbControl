@@ -18,7 +18,7 @@ namespace BreadcrumbControl
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
             "Header", typeof (string), typeof (BreadcrumbItem), new PropertyMetadata(default(string)));
 
-        public string Header
+        public object Header
         {
             get { return (string) GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
@@ -41,6 +41,15 @@ namespace BreadcrumbControl
         {
             get { return (ImageSource) GetValue(IconProperty); }
             set { SetValue(IconProperty, value); }
+        }
+
+        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(
+            "Progress", typeof (int), typeof (BreadcrumbItem), new PropertyMetadata(default(int)));
+
+        public int Progress
+        {
+            get { return (int) GetValue(ProgressProperty); }
+            set { SetValue(ProgressProperty, value); }
         }
 
         static BreadcrumbItem()
