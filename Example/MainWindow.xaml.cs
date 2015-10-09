@@ -32,10 +32,5 @@ namespace Example
             Items.Add(new BreadcrumbItem() {Header = "1"});
             Items.Add(new BreadcrumbItem() { Header = "2" });
         }
-
-        private void OnContentChanged(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-        }
     }
 }

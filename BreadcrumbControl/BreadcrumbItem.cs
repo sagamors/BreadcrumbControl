@@ -52,6 +52,31 @@ namespace BreadcrumbControl
             set { SetValue(ProgressProperty, value); }
         }
 
+        internal Breadcrumb ParentBreadcrumb
+        {
+            get
+            {
+                Breadcrumb tv = Parent as Breadcrumb;
+                if (tv != null)
+                    return tv;
+             
+                ItemsControl parent = Parent as ItemsControl;
+
+                while (parent != null)
+                {
+                    tv = parent as Breadcrumb;
+                    if (tv != null)
+                    {
+                        return tv;
+                    }
+
+                    parent = ItemsControl.ItemsControlFromItemContainer(parent);
+                }
+
+                return null;
+            }
+        }
+
         static BreadcrumbItem()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof (BreadcrumbItem),

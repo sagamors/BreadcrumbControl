@@ -33,11 +33,20 @@ namespace BreadcrumbControl
     ///     <MyNamespace:Breadcrumb/>
     ///
     /// </summary>
-    public class Breadcrumb : Selector
+    public class Breadcrumb : ItemsControl
     {
         static Breadcrumb()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Breadcrumb), new FrameworkPropertyMetadata(typeof(Breadcrumb)));
+        }
+
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
+            "SelectedItem", typeof (object), typeof (Breadcrumb), new PropertyMetadata(default(object)));
+
+        public object SelectedItem
+        {
+            get { return (object) GetValue(SelectedItemProperty); }
+            set { SetValue(SelectedItemProperty, value); }
         }
     }
 }
