@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
 namespace BreadcrumbControl
 {
@@ -35,20 +38,79 @@ namespace BreadcrumbControl
     /// </summary>
     public class Breadcrumb : ItemsControl
     {
+        private const string _partCombobox = "PART_Combobox";
+        private ComboBox _comboBox;
+        TextBox tb;
+
         static Breadcrumb()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Breadcrumb), new FrameworkPropertyMetadata(typeof(Breadcrumb)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof (Breadcrumb),
+                new FrameworkPropertyMetadata(typeof (Breadcrumb)));
         }
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", typeof (object), typeof (Breadcrumb), new PropertyMetadata(default(object), (o, args) =>
-            {
-
-            }));
+            "SelectedItem", typeof (object), typeof (Breadcrumb), new PropertyMetadata(default(object)));
 
         public Breadcrumb()
         {
+   
             Loaded += Breadcrumb_Loaded;
+
+        }
+
+        public override void OnApplyTemplate()
+        {
+            _comboBox = GetTemplateChild(_partCombobox) as ComboBox;
+            if (_comboBox == null)
+            {
+
+                Debug.WriteLine(_partCombobox + " not found");
+            }
+            _comboBox.ApplyTemplate();
+        
+            tb = (TextBox)_comboBox.Template.FindName("PART_EditableTextBox", _comboBox);
+            if (tb != null)
+            {
+                tb.LostFocus += ComboBoxLostFocus ;
+            }
+
+            UnsetInputState();
+            base.OnApplyTemplate();
+        }
+
+        private void ComboBoxLostFocus(object sender, RoutedEventArgs routedEventArgs)
+        {
+            UnsetInputState();
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (e.Handled) return;
+            if (e.ChangedButton == MouseButton.Left && e.LeftButton == MouseButtonState.Pressed)
+            {
+                e.Handled = true;
+                SetInputState();
+            }
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            UnsetInputState();
+            base.OnLostFocus(e);
+        }
+
+        public void SetInputState()
+        {
+            if (_comboBox == null) return;
+                _comboBox.Visibility = Visibility.Visible;
+            _comboBox.Focus();
+        }
+
+        public void UnsetInputState()
+        {
+            if(_comboBox!=null)
+            _comboBox.Visibility = Visibility.Collapsed;
         }
 
         private void Breadcrumb_Loaded(object sender, RoutedEventArgs e)
@@ -67,6 +129,7 @@ namespace BreadcrumbControl
             get { return (DataTemplate) GetValue(SelectedHeaderTemplateProperty); }
             set { SetValue(SelectedHeaderTemplateProperty, value); }
         }
+
 
         public object SelectedItem
         {

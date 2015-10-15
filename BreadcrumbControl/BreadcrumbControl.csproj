@@ -66,6 +66,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\OrMultiBoolConverter.cs" />
     <Compile Include="DropDownButton.cs" />
+    <Compile Include="Helpers\DependencyObjectEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

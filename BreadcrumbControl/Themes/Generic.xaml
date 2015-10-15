@@ -5,7 +5,8 @@
                     xmlns:converters="clr-namespace:BreadcrumbControl.Converters"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:local="clr-namespace:BreadcrumbControl"
-                    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
+                    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
 
     <converters:AndMultiBoolConverter x:Key="AndMultiBoolConverter" />
     <converters:OrMultiBoolConverter x:Key="OrMultiBoolConverter" />
@@ -56,15 +57,17 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <system:Double x:Key="OpacityBackgraound">0.8</system:Double>
     <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
     <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+    <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD" Opacity="{StaticResource OpacityBackgraound}"/>
     <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+    <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6" Opacity="{StaticResource OpacityBackgraound}"/>
     <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+    <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4" Opacity="{StaticResource OpacityBackgraound}"/>
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+    
     <Style x:Key="MetroButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
         <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
@@ -76,14 +79,14 @@
         <Setter Property="Padding" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border  x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
                         <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsDefaulted" Value="true">
+      <!--                  <Trigger Property="IsDefaulted" Value="true">
                             <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                        </Trigger>
+                        </Trigger>-->
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
                             <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
@@ -142,11 +145,25 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <ProgressBar Minimum="0" Value="50" Maximum="100"/>
-                            <local:BreadcrumbItem ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Items}" 
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <local:BreadcrumbItem Grid.Column="0" ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Items}" 
                                                   Header="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem.Header, Mode=OneWay}"
                                                   HeaderTemplate="{TemplateBinding SelectedHeaderTemplate}"
+                                             
                                                   />
-                      
+                                <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" Background="Transparent"/>
+                            </Grid>
+                        
+               
+                            <ComboBox x:Name="PART_Combobox" IsEditable="True"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -208,7 +225,7 @@
     </Style>
 
     <Style TargetType="{x:Type local:DropDownButton}" BasedOn="{StaticResource MetroButtonStyle}">
-        <Setter Property="Template">
+<!--        <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:DropDownButton}">
                     <Border Background="{TemplateBinding Background}"
@@ -218,12 +235,11 @@
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
-        </Setter>
-
+        </Setter>-->
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate DataType="local:DropDownButton">
-                    <Grid  x:Name="StackPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid x:Name="StackPanel" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition  Width="Auto"/>

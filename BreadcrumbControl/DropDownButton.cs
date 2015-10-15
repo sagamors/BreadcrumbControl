@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
+using BreadcrumbControl.Helpers;
 
 namespace BreadcrumbControl
 {
@@ -10,6 +10,7 @@ namespace BreadcrumbControl
     {
         private const string _partContent = "PART_Content";
         private ContextMenu _contextMenu;
+        private bool _isLoaded;
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
             "ItemsSource", typeof (IEnumerable), typeof (DropDownButton), new PropertyMetadata(default(IEnumerable),
@@ -51,12 +52,16 @@ namespace BreadcrumbControl
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DropDownButton), new FrameworkPropertyMetadata(typeof(DropDownButton)));
         }
 
-        public override void OnApplyTemplate()
+        public DropDownButton()
         {
-            base.OnApplyTemplate();
-            var contentPresenter = GetTemplateChild(_partContent) as ContentPresenter;
-            contentPresenter.ApplyTemplate();
-            var stackPanel =  contentPresenter.ContentTemplate.FindName("StackPanel", contentPresenter) as FrameworkElement;
+            Loaded += DropDownButton_Loaded;
+        }
+        private void DropDownButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_isLoaded) return;
+            _isLoaded = true;
+            // todo when Tempate change?
+            var stackPanel = this.FindChild<Grid>("StackPanel");
             if (stackPanel != null)
             {
                 _contextMenu = stackPanel.ContextMenu;
@@ -68,16 +73,13 @@ namespace BreadcrumbControl
                 _contextMenu.Opened += ContextMenu_Opened;
                 _contextMenu.Closed += ContextMenu_Closed;
             }
-
             Checked += DropDownButton_Checked;
             Unchecked += DropDownButton_Unchecked;
-         
         }
 
-        private void DropDownButton_Loaded(object sender, RoutedEventArgs e)
+        public override void OnApplyTemplate()
         {
-           var fgghhh =  GetTemplateChild("PART_Content") as ContentPresenter;
-
+            base.OnApplyTemplate();
         }
 
         private void ContextMenu_Closed(object sender, RoutedEventArgs e)
