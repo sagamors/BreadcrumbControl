@@ -103,7 +103,6 @@
         </Setter>
     </Style>
 
-
     <LinearGradientBrush x:Key="ButtonNormalBackground" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="#F3F3F3" />
         <GradientStop Offset="0.5" Color="#EBEBEB" />
@@ -145,6 +144,7 @@
                             <ProgressBar Minimum="0" Value="50" Maximum="100"/>
                             <local:BreadcrumbItem ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Items}" 
                                                   Header="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=SelectedItem.Header, Mode=OneWay}"
+                                                  HeaderTemplate="{TemplateBinding SelectedHeaderTemplate}"
                                                   />
                       
                         </Grid>
@@ -157,9 +157,9 @@
     <Style TargetType="{x:Type local:BreadcrumbItem}">
         <Setter Property="HeaderTemplate">
             <Setter.Value>
-                <ControlTemplate>
-                    <ContentPresenter Content="{Binding}" />
-                </ControlTemplate>
+                <DataTemplate>
+                        <ContentPresenter Content="{Binding}" />
+                </DataTemplate>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
@@ -182,10 +182,12 @@
                                                                         Mode=OneWay}"
                                                      Background="Transparent"
                                                     >
+                         
                                 <ContentPresenter x:Name="PART_Header"
                                                   VerticalAlignment="Center"
                                                   Content="{TemplateBinding Header}"
-                                                  ContentTemplate="{TemplateBinding HeaderTemplate}" />
+                                                  ContentTemplate="{Binding HeaderTemplate, RelativeSource={RelativeSource AncestorType=local:BreadcrumbItem, Mode=FindAncestor}, Mode=TwoWay}" />  
+                          
                             </local:BreadcrumbButton>
                             <local:DropDownButton
                                     Grid.Column="1"

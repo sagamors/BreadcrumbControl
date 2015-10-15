@@ -25,14 +25,14 @@ namespace BreadcrumbControl
         }
 
         public static readonly DependencyProperty HeaderTemplateProperty = DependencyProperty.Register(
-            "HeaderTemplate", typeof (ControlTemplate), typeof (BreadcrumbItem),
-            new PropertyMetadata(default(ControlTemplate)));
+            "HeaderTemplate", typeof (DataTemplate), typeof (BreadcrumbItem), new PropertyMetadata(default(DataTemplate)));
 
-        public ControlTemplate HeaderTemplate
+        public DataTemplate HeaderTemplate
         {
-            get { return (ControlTemplate) GetValue(HeaderTemplateProperty); }
+            get { return (DataTemplate) GetValue(HeaderTemplateProperty); }
             set { SetValue(HeaderTemplateProperty, value); }
         }
+
 
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
             "Icon", typeof (ImageSource), typeof (BreadcrumbItem), new PropertyMetadata(default(ImageSource)));
@@ -69,7 +69,6 @@ namespace BreadcrumbControl
                     {
                         return tv;
                     }
-
                     parent = ItemsControl.ItemsControlFromItemContainer(parent);
                 }
 

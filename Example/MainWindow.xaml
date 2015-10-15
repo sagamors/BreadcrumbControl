@@ -14,7 +14,16 @@
         >
     <StackPanel>
         <bc:Breadcrumb x:Name="Breadcrumb">
-            <bc:BreadcrumbItem  Header="Parent1"/>
+            <bc:Breadcrumb.SelectedHeaderTemplate>
+                <DataTemplate>
+                    <Border Background="Red">
+                        <ContentControl Content="{Binding}"></ContentControl>
+                    </Border>
+                </DataTemplate>
+            </bc:Breadcrumb.SelectedHeaderTemplate>
+            <bc:BreadcrumbItem Header="Parent1"
+                                >                
+            </bc:BreadcrumbItem>
                 <bc:BreadcrumbItem  Header="Parent2">
                 <bc:BreadcrumbItem Header="Child1">
                     <bc:BreadcrumbItem Header="Child11"/>

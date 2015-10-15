@@ -41,7 +41,32 @@ namespace BreadcrumbControl
         }
 
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register(
-            "SelectedItem", typeof (object), typeof (Breadcrumb), new PropertyMetadata(default(object)));
+            "SelectedItem", typeof (object), typeof (Breadcrumb), new PropertyMetadata(default(object), (o, args) =>
+            {
+
+            }));
+
+        public Breadcrumb()
+        {
+            Loaded += Breadcrumb_Loaded;
+        }
+
+        private void Breadcrumb_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItem == null && Items.Count > 0)
+            {
+                SetValue(Breadcrumb.SelectedItemProperty, Items[0]);
+            }
+        }
+
+        public static readonly DependencyProperty SelectedHeaderTemplateProperty = DependencyProperty.Register(
+            "SelectedHeaderTemplate", typeof (DataTemplate), typeof (Breadcrumb), new PropertyMetadata(default(DataTemplate)));
+
+        public DataTemplate SelectedHeaderTemplate
+        {
+            get { return (DataTemplate) GetValue(SelectedHeaderTemplateProperty); }
+            set { SetValue(SelectedHeaderTemplateProperty, value); }
+        }
 
         public object SelectedItem
         {
