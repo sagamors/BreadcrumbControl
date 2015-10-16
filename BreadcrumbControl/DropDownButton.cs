@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -11,6 +12,20 @@ namespace BreadcrumbControl
         private const string _partContent = "PART_Content";
         private ContextMenu _contextMenu;
         private bool _isLoaded;
+
+        public class SelectedChangedArgs : EventArgs
+        {
+            public SelectedChangedArgs(object newValue, object oldValue)
+            {
+                NewValue = newValue;
+                OldValue = oldValue;
+            }
+
+            public object OldValue { get; }
+            public object NewValue { get; }
+        }
+
+        public event EventHandler<SelectedChangedArgs> SelectedChanged; 
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
             "ItemsSource", typeof (IEnumerable), typeof (DropDownButton), new PropertyMetadata(default(IEnumerable),
@@ -39,7 +54,12 @@ namespace BreadcrumbControl
         }
 
         public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register(
-            "SelectedValue", typeof (object), typeof (DropDownButton), new PropertyMetadata(default(object)));
+            "SelectedValue", typeof (object), typeof (DropDownButton), new PropertyMetadata(default(object),
+                (o, args) =>
+                {
+                    DropDownButton control = (DropDownButton) o;
+                    control.OnSelectedChanged(args.NewValue,args.OldValue);
+                }));
 
         public object SelectedValue
         {
@@ -125,6 +145,11 @@ namespace BreadcrumbControl
             {
                 SelectedValue = menuItem.DataContext;
             }
+        }
+
+        protected virtual void OnSelectedChanged(object newValue, object oldValue)
+        {
+            SelectedChanged?.Invoke(this, new SelectedChangedArgs(newValue,oldValue));
         }
     }
 
