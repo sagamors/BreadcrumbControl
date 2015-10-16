@@ -31,6 +31,14 @@ namespace Example
             InitializeComponent();
             Items.Add(new BreadcrumbItem() {Header = "1"});
             Items.Add(new BreadcrumbItem() { Header = "2" });
+            Breadcrumb.SelectedItem = Items.First();
+          
+           
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var g = Breadcrumb.Path;
         }
     }
 }
