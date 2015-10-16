@@ -14,6 +14,8 @@ namespace BreadcrumbControl
         private const string _partContextMenu = "PART_ContextMenu";
         private Button _headerButton;
         private ContextMenu _contextMenu;
+        private DropDownButton _dropDownButton;
+        private string _partDropDownButton = "PART_DropDownButton";
 
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
             "Header", typeof (string), typeof (BreadcrumbItem), new PropertyMetadata(default(string)));
@@ -41,15 +43,6 @@ namespace BreadcrumbControl
         {
             get { return (ImageSource) GetValue(IconProperty); }
             set { SetValue(IconProperty, value); }
-        }
-
-        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(
-            "Progress", typeof (int), typeof (BreadcrumbItem), new PropertyMetadata(default(int)));
-
-        public int Progress
-        {
-            get { return (int) GetValue(ProgressProperty); }
-            set { SetValue(ProgressProperty, value); }
         }
 
         internal Breadcrumb ParentBreadcrumb
@@ -80,6 +73,12 @@ namespace BreadcrumbControl
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof (BreadcrumbItem),
                 new FrameworkPropertyMetadata(typeof (BreadcrumbItem)));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            _dropDownButton = GetTemplateChild(_partDropDownButton) as DropDownButton;
+            base.OnApplyTemplate();
         }
     }
 }
