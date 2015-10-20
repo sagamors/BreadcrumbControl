@@ -22,8 +22,5 @@
                 <bc:BreadcrumbItem Header="Child2" />
             </bc:BreadcrumbItem>
         </bc:Breadcrumb>
-        <bc:DropDownButton Style="{Binding Items}">
-            
-        </bc:DropDownButton>
     </StackPanel>
 </Window>
