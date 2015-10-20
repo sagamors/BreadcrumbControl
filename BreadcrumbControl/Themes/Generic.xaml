@@ -218,6 +218,8 @@
         </Setter>
     </Style>
 
+    <system:Double x:Key="SizeHeaderIcon">16</system:Double>
+    
     <Style TargetType="{x:Type local:Breadcrumb}">
         <Style.Resources>
             <Style TargetType="local:BreadcrumbItem">
@@ -227,7 +229,7 @@
         <Setter Property="SelectedHeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <ContentControl Content="{Binding}" />
+                    <Image Width="{StaticResource SizeHeaderIcon}" Height="{StaticResource SizeHeaderIcon}" Source="{Binding Icon}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -255,11 +257,11 @@
 
                                 <local:BreadcrumbItem x:Name="PART_RootItem"
                                                       Grid.Column="0"
-                                                      Header="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                      Header="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb},
                                                                        Path=SelectedItem,
                                                                        Mode=OneWay}"
                                                       HeaderTemplate="{TemplateBinding SelectedHeaderTemplate}"
-                                                      ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},
+                                                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb},
                                                                             Path=Items}" />
                                 <ToggleButton Grid.Row="0"
                                               Grid.Column="1"
@@ -278,14 +280,10 @@
                                           Focusable="False"
                                           SnapsToDevicePixels="True" />
                                 </ToggleButton>
-
                             </Grid>
-
                             <ComboBox x:Name="PART_Combobox"
                                       Background="Transparent"
                                       IsEditable="True">
-                                <system:String>A</system:String>
-                                <system:String>B</system:String>
                             </ComboBox>
                         </Grid>
                     </Border>
@@ -320,7 +318,9 @@
                                                     Background="Transparent"
                                                     IsChecked="{Binding ElementName=PART_Button,
                                                                         Path=IsChecked,
-                                                                        Mode=OneWay}">
+                                                                        Mode=OneWay}"
+                                                    Style="{StaticResource MetroToggleStyle}"
+                                                    >
 
                                 <ContentPresenter x:Name="PART_Header"
                                                   VerticalAlignment="Center"
@@ -373,7 +373,11 @@
                                 <ContextMenu.ItemContainerStyle>
                                     <Style TargetType="MenuItem">
                                         <Setter Property="Header" Value="{Binding Header}" />
-                                        <Setter Property="Icon" Value="{Binding Icon}" />
+                                        <Setter Property="Icon" >
+                                            <Setter.Value>
+                                                <Image Source="{Binding Icon}"/>
+                                            </Setter.Value>
+                                        </Setter>
                                     </Style>
                                 </ContextMenu.ItemContainerStyle>
                             </ContextMenu>

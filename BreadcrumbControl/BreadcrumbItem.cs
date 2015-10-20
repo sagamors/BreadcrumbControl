@@ -18,7 +18,7 @@ namespace BreadcrumbControl
         private string _partDropDownButton = "PART_DropDownButton";
 
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-            "Header", typeof (string), typeof (BreadcrumbItem), new PropertyMetadata(default(string)));
+            "Header", typeof (object), typeof (BreadcrumbItem), new PropertyMetadata(default(object)));
 
         public object Header
         {
