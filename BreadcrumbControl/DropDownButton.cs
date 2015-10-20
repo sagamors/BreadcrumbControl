@@ -97,11 +97,6 @@ namespace BreadcrumbControl
             Unchecked += DropDownButton_Unchecked;
         }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-        }
-
         private void ContextMenu_Closed(object sender, RoutedEventArgs e)
         {
             ContextMenu menu = (ContextMenu)sender;
@@ -112,14 +107,11 @@ namespace BreadcrumbControl
         {
             if (_contextMenu == null) return;
             _contextMenu.IsOpen = false;
-            IsChecked = false;
         }
 
         private void DropDownButton_Checked(object sender, RoutedEventArgs e)
         {
             if (_contextMenu == null) return;
-            ((DropDownButton)_contextMenu.PlacementTarget).IsChecked = false;
-
             _contextMenu.PlacementTarget = this;
             _contextMenu.Placement = PlacementMode.Bottom;
             _contextMenu.ItemsSource = ItemsSource;
