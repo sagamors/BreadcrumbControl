@@ -97,9 +97,34 @@ namespace BreadcrumbControl
             }
 
             UnsetInputState();
+            this.KeyDown += Breadcrumb_KeyDown;
             base.OnApplyTemplate();
         }
 
+        private void Breadcrumb_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(!IsEditing) return;
+
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    Reset();
+                    break;
+                case Key.Enter:
+                    ApplyPath();
+                    break;
+            }
+        }
+
+        private void Reset()
+        {
+            IsEditing = false;
+        }
+
+        private void ApplyPath()
+        {
+            IsEditing = false;
+        }
         private void _comboBox_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             IsEditing = (bool) e.NewValue;
