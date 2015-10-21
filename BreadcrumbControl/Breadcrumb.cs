@@ -15,6 +15,7 @@ namespace BreadcrumbControl
         private const string _partCombobox = "PART_Combobox";
         private string _partItemsView = "PART_ItemsView";
         private string _partRootItem = "PART_RootItem";
+        private TextBox _comboboxTextBox;
 
         private ComboBox _comboBox;
         private Grid _itemsView;
@@ -93,6 +94,7 @@ namespace BreadcrumbControl
             else
             {
                 _comboBox.ApplyTemplate();
+                _comboboxTextBox=_comboBox.Template.FindName("PART_EditableTextBox", _comboBox) as TextBox;
                 _comboBox.IsKeyboardFocusWithinChanged += _comboBox_IsKeyboardFocusWithinChanged;
             }
 
@@ -146,9 +148,11 @@ namespace BreadcrumbControl
             if (_comboBox == null) return;
                 _comboBox.Visibility = Visibility.Visible;
             _itemsView.Visibility = Visibility.Collapsed;
-            _comboBox.Focus();
+            _comboboxTextBox.Focus();
+           // _comboBox.Focus();
             _comboBox.Items.Clear();
             _comboBox.Items.Add(GetCurrentPath());
+
         }
 
         public void UnsetInputState()
@@ -210,6 +214,8 @@ namespace BreadcrumbControl
 
         public static readonly DependencyProperty PathProperty = DependencyProperty.Register(
             "Path", typeof (string), typeof (Breadcrumb), new PropertyMetadata(default(string)));
+
+
 
         public string Path
         {

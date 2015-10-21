@@ -28,7 +28,11 @@
     <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4" />
     <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5" />
     <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383" />
-
+    
+    <SolidColorBrush x:Key="Combobox.Static.Background" Color="White"/>
+    <SolidColorBrush x:Key="Combobox.Static.Border" Color="{x:Static SystemColors.ActiveBorderColor}"/>
+    
+    
     <ControlTemplate x:Key="MetroButtonBaseControlTemplate" TargetType="{x:Type ButtonBase}">
         <Border x:Name="border"
                 Background="{TemplateBinding Background}"
@@ -221,11 +225,11 @@
     <system:Double x:Key="SizeHeaderIcon">16</system:Double>
     
     <Style TargetType="{x:Type local:Breadcrumb}">
-        <Style.Resources>
+<!--        <Style.Resources>
             <Style TargetType="local:BreadcrumbItem">
                 <Setter Property="SelectedValue" Value="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb, Mode=FindAncestor}, Path=SelectedItem, Mode=OneWayToSource}" />
             </Style>
-        </Style.Resources>
+        </Style.Resources>-->
         <Setter Property="SelectedHeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -281,10 +285,26 @@
                                           SnapsToDevicePixels="True" />
                                 </ToggleButton>
                             </Grid>
-                            <ComboBox x:Name="PART_Combobox"
+                            <Border BorderBrush="{StaticResource Combobox.Static.Border}" 
+                                    Background="{StaticResource Combobox.Static.Background}"
+                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb}, Path=IsEditing, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    BorderThickness="1"
+                                    >
+                                <Grid>                              
+                                    <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Image Height="{StaticResource SizeHeaderIcon}" Width="{StaticResource SizeHeaderIcon}" Grid.Column="0" Source="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb}, Path=SelectedItem.Icon}"/>
+                                <ComboBox Grid.Column="1" x:Name="PART_Combobox"
                                       Background="Transparent"
-                                      IsEditable="True">
+                                      IsEditable="True"
+                                      BorderThickness="0"    
+                                          >
                             </ComboBox>
+                            </Grid>
+                            </Border>
+                            
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -357,7 +377,7 @@
         </Setter>
     </Style>
 
-    <Style BasedOn="{StaticResource MetroToggleStyle}" TargetType="{x:Type local:DropDownButton}">
+    <Style  TargetType="{x:Type local:DropDownButton}" BasedOn="{StaticResource MetroToggleStyle}">
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate DataType="local:DropDownButton">

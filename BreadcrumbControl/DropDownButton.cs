@@ -92,6 +92,9 @@ namespace BreadcrumbControl
                 _contextMenu.PlacementTarget = this;
                 _contextMenu.Opened += ContextMenu_Opened;
                 _contextMenu.Closed += ContextMenu_Closed;
+                _contextMenu.PlacementTarget = this;
+                _contextMenu.Placement = PlacementMode.Bottom;
+                _contextMenu.ItemsSource = ItemsSource;
             }
             Checked += DropDownButton_Checked;
             Unchecked += DropDownButton_Unchecked;
@@ -111,10 +114,7 @@ namespace BreadcrumbControl
 
         private void DropDownButton_Checked(object sender, RoutedEventArgs e)
         {
-            if (_contextMenu == null) return;
-            _contextMenu.PlacementTarget = this;
-            _contextMenu.Placement = PlacementMode.Bottom;
-            _contextMenu.ItemsSource = ItemsSource;
+  
             _contextMenu.IsOpen = true;
         }
 

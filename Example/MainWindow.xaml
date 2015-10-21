@@ -13,14 +13,20 @@
         mc:Ignorable="d">
     <StackPanel>
         <bc:Breadcrumb x:Name="Breadcrumb">
-            <bc:BreadcrumbItem Header="Parent1" />
-            <bc:BreadcrumbItem Header="Parent2" Icon="Resources/tip.png">
-                <bc:BreadcrumbItem Header="Child1" Icon="Resources/caution.png">
+            <bc:BreadcrumbItem Header="Parent1"  Icon="Resources/tip.png" >
+                <bc:BreadcrumbItem Header="Child1" >
                     <bc:BreadcrumbItem Header="Child11" />
                     <bc:BreadcrumbItem Header="Child12" />
+                </bc:BreadcrumbItem>
+            </bc:BreadcrumbItem>
+            <bc:BreadcrumbItem Header="Parent2">
+                <bc:BreadcrumbItem Header="Child21" Icon="Resources/caution.png">
+                    <bc:BreadcrumbItem Header="Child211" />
+                    <bc:BreadcrumbItem Header="Child212" />
                 </bc:BreadcrumbItem>
                 <bc:BreadcrumbItem Header="Child2" />
             </bc:BreadcrumbItem>
         </bc:Breadcrumb>
+        <Image Source="{Binding ElementName=Breadcrumb, Path=SelectedItem.Icon}"></Image>
     </StackPanel>
 </Window>

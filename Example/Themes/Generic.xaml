@@ -14,7 +14,6 @@
                         <Border.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="231"></MenuItem>
-                                
                             </ContextMenu>
                         </Border.ContextMenu>
                     </Border>
