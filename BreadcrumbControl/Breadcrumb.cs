@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using BreadcrumbControl.Helpers;
 
 namespace BreadcrumbControl
 {
@@ -16,10 +15,11 @@ namespace BreadcrumbControl
         private string _partItemsView = "PART_ItemsView";
         private string _partRootItem = "PART_RootItem";
         private TextBox _comboboxTextBox;
-
+        private PathHelper _pathHelper;
         private ComboBox _comboBox;
         private Grid _itemsView;
         private BreadcrumbItem _rootItem;
+        Popup _popup;
 
         static Breadcrumb()
         {
@@ -32,6 +32,7 @@ namespace BreadcrumbControl
 
         public Breadcrumb()
         {
+            _pathHelper = new PathHelper(this);
             Loaded += Breadcrumb_Loaded;
         }
 
@@ -86,6 +87,7 @@ namespace BreadcrumbControl
             _comboBox = GetTemplateChild(_partCombobox) as ComboBox;
             _itemsView = GetTemplateChild(_partItemsView) as Grid;
             _rootItem = GetTemplateChild(_partRootItem) as BreadcrumbItem;
+
             if (_comboBox == null)
             {
 
@@ -94,13 +96,23 @@ namespace BreadcrumbControl
             else
             {
                 _comboBox.ApplyTemplate();
-                _comboboxTextBox=_comboBox.Template.FindName("PART_EditableTextBox", _comboBox) as TextBox;
+                _popup = _comboBox.Template.FindName("PART_Popup", _comboBox) as Popup;
+                _comboboxTextBox =_comboBox.Template.FindName("PART_EditableTextBox", _comboBox) as TextBox;
+                if (_comboboxTextBox != null) _comboboxTextBox.TextChanged += _comboboxTextBox_TextChanged;
                 _comboBox.IsKeyboardFocusWithinChanged += _comboBox_IsKeyboardFocusWithinChanged;
             }
 
             UnsetInputState();
             this.KeyDown += Breadcrumb_KeyDown;
             base.OnApplyTemplate();
+        }
+
+        private void _comboboxTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var paths=_pathHelper.GetAppropriatePaths(_comboboxTextBox.Text);
+
+            _comboBox.IsDropDownOpen= _comboBox.StaysOpenOnEdit = paths.Count > 0;
+            _comboBox.ItemsSource = paths;
         }
 
         private void Breadcrumb_KeyDown(object sender, KeyEventArgs e)
@@ -138,7 +150,9 @@ namespace BreadcrumbControl
             if (e.ChangedButton == MouseButton.Left && e.LeftButton == MouseButtonState.Pressed)
             {
                 e.Handled = true;
-                SetValue(IsEditingProperty,true);
+                IsEditing = true;
+                if (IsEditing)
+                    _comboBox.Focus();
             }
             base.OnMouseDown(e);
         }
@@ -148,11 +162,8 @@ namespace BreadcrumbControl
             if (_comboBox == null) return;
                 _comboBox.Visibility = Visibility.Visible;
             _itemsView.Visibility = Visibility.Collapsed;
-            _comboboxTextBox.Focus();
-           // _comboBox.Focus();
-            _comboBox.Items.Clear();
-            _comboBox.Items.Add(GetCurrentPath());
-
+            _comboBox.Focus();
+            _comboboxTextBox.Text = GetCurrentPath();
         }
 
         public void UnsetInputState()
@@ -191,7 +202,7 @@ namespace BreadcrumbControl
             {
                 var res = new List<BreadcrumbItem>();
                 var child = SelectedItem as BreadcrumbItem;
-                while (child?.Parent != null)
+                while (child!= null)
                 {
                     res.Add(child);
                     child = child.Parent as BreadcrumbItem;
@@ -210,17 +221,6 @@ namespace BreadcrumbControl
                 sb.Append(@"\");
             }
             return sb.ToString();
-        }
-
-        public static readonly DependencyProperty PathProperty = DependencyProperty.Register(
-            "Path", typeof (string), typeof (Breadcrumb), new PropertyMetadata(default(string)));
-
-
-
-        public string Path
-        {
-            get { return (string) GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
         }
     }
 }

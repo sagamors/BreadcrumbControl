@@ -29,11 +29,9 @@ namespace Example
         public MainWindow()
         {
             InitializeComponent();
-            Items.Add(new BreadcrumbItem() {Header = "1"});
+/*            Items.Add(new BreadcrumbItem() {Header = "1"});
             Items.Add(new BreadcrumbItem() { Header = "2" });
-            Breadcrumb.SelectedItem = Items.First();
-          
-           
+            Breadcrumb.SelectedItem = Items.First();*/
         }
     }
 }

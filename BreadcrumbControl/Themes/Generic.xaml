@@ -225,12 +225,12 @@
     <system:Double x:Key="SizeHeaderIcon">16</system:Double>
     
     <Style TargetType="{x:Type local:Breadcrumb}">
-<!--        <Style.Resources>
+            <Style.Resources>
             <Style TargetType="local:BreadcrumbItem">
                 <Setter Property="SelectedValue" Value="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb, Mode=FindAncestor}, Path=SelectedItem, Mode=OneWayToSource}" />
             </Style>
-        </Style.Resources>-->
-        <Setter Property="SelectedHeaderTemplate">
+            </Style.Resources>
+            <Setter Property="SelectedHeaderTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <Image Width="{StaticResource SizeHeaderIcon}" Height="{StaticResource SizeHeaderIcon}" Source="{Binding Icon}"/>
@@ -296,12 +296,13 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Image Height="{StaticResource SizeHeaderIcon}" Width="{StaticResource SizeHeaderIcon}" Grid.Column="0" Source="{Binding RelativeSource={RelativeSource AncestorType=local:Breadcrumb}, Path=SelectedItem.Icon}"/>
-                                <ComboBox Grid.Column="1" x:Name="PART_Combobox"
+                                    <ComboBox Grid.Column="1" x:Name="PART_Combobox"
                                       Background="Transparent"
                                       IsEditable="True"
-                                      BorderThickness="0"    
-                                          >
-                            </ComboBox>
+                                      BorderThickness="0"  
+                                      IsSynchronizedWithCurrentItem="False"
+                                    >
+                                    </ComboBox>
                             </Grid>
                             </Border>
                             

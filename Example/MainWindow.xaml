@@ -28,5 +28,11 @@
             </bc:BreadcrumbItem>
         </bc:Breadcrumb>
         <Image Source="{Binding ElementName=Breadcrumb, Path=SelectedItem.Icon}"></Image>
+    <Button Height="22"></Button>
+    <TextBox Height="22"></TextBox>
+        <bc:AutoFilteredComboBox  IsEditable="True" IsTextSearchEnabled="False">
+            <ComboBoxItem>Parent1</ComboBoxItem>
+            <ComboBoxItem>Parent2</ComboBoxItem>
+        </bc:AutoFilteredComboBox>
     </StackPanel>
 </Window>

@@ -1,11 +1,13 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace BreadcrumbControl
 {
-
     public class BreadcrumbItem : Selector
     {
         private const string partHeaderButton = "PART_HeaderButton";
@@ -16,6 +18,7 @@ namespace BreadcrumbControl
         private ContextMenu _contextMenu;
         private DropDownButton _dropDownButton;
         private string _partDropDownButton = "PART_DropDownButton";
+        private string _fullPath;
 
         public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
             "Header", typeof (object), typeof (BreadcrumbItem), new PropertyMetadata(default(object)));
@@ -69,6 +72,11 @@ namespace BreadcrumbControl
             }
         }
 
+        public string FullPath
+        {
+            get { return _fullPath ?? (_fullPath = GetPath()); }
+        }
+
         static BreadcrumbItem()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof (BreadcrumbItem),
@@ -79,6 +87,20 @@ namespace BreadcrumbControl
         {
             _dropDownButton = GetTemplateChild(_partDropDownButton) as DropDownButton;
             base.OnApplyTemplate();
+        }
+
+        private string GetPath()
+        {
+            var res = new List<string>();
+            var child =  this;
+            while (child != null)
+            {
+                //todo fix cast to string
+                res.Add((string)child.Header);
+                child = child.Parent as BreadcrumbItem;
+            }
+            res.Reverse();
+            return res.Aggregate(string.Empty, (current, v) => current + (Path.DirectorySeparatorChar + v));
         }
     }
 }

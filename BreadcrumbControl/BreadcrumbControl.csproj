@@ -51,6 +51,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoFilteredComboBox.cs" />
+    <Compile Include="Helpers\PathHelper.cs" />
     <Compile Include="Themes\PathProvider.cs" />
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
